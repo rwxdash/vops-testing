@@ -15,7 +15,7 @@ sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
     software-properties-common \
-    curl \
+    curl jq \
     gnupg gnupg2 \
     lsb-release \
     containerd.io docker-ce docker-ce-cli \
@@ -44,8 +44,6 @@ sudo systemctl enable docker
 sudo rm /etc/containerd/config.toml
 sudo systemctl restart containerd
 
-# ---
-
 sudo hostnamectl set-hostname kubernetes-master
 
 # ---
@@ -54,9 +52,21 @@ sudo hostnamectl set-hostname kubernetes-master
 EC2_PUBLIC_IP=$(curl checkip.amazonaws.com)
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-cert-extra-sans=$EC2_PUBLIC_IP
 
+KUBEADM_JOIN_COMMAND=$(kubeadm token create --print-join-command 2> /dev/null)
+aws ssm put-parameter \
+    --name kubernetes-cluster-join-command \
+    --value ${KUBEADM_JOIN_COMMAND} \
+    --type SecureString
+    --region us-west-2
+
 mkdir -p /home/ubuntu/.kube
 sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
 sudo chown $(id -u ubuntu):$(id -u ubuntu) /home/ubuntu/.kube/config
+aws ssm put-parameter \
+    --name kubernetes-cluster-kubeconfig \
+    --type SecureString \
+    --value file:///home/ubuntu/.kube/config
+    --region us-west-2
 
 sudo systemctl restart kubelet
 
