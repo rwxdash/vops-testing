@@ -60,13 +60,13 @@ sleep 120
 
 # ---
 
-KUBEADM_JOIN_COMMAND=$(aws ssm get-parameters \
+KUBEADM_TMP_JOIN_COMMAND=$(aws ssm get-parameters \
     --with-decryption \
-    --name kubernetes-cluster-join-command \
+    --name kubernetes-cluster-tmp-join-command \
     --region us-west-2 \
     | jq -r '.Parameters[0].Value')
 
-sudo -s eval $KUBEADM_JOIN_COMMAND
+sudo -s eval $KUBEADM_TMP_JOIN_COMMAND
 
 mkdir -p /home/ubuntu/.kube
 

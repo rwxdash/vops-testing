@@ -58,10 +58,10 @@ sudo systemctl restart containerd
 EC2_PUBLIC_IP=$(curl checkip.amazonaws.com)
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-cert-extra-sans=$EC2_PUBLIC_IP
 
-KUBEADM_JOIN_COMMAND=$(kubeadm token create --print-join-command 2> /dev/null)
+KUBEADM_TMP_JOIN_COMMAND=$(kubeadm token create --print-join-command 2> /dev/null)
 aws ssm put-parameter \
-    --name kubernetes-cluster-join-command \
-    --value "${KUBEADM_JOIN_COMMAND}" \
+    --name kubernetes-cluster-tmp-join-command \
+    --value "$KUBEADM_TMP_JOIN_COMMAND" \
     --type SecureString \
     --overwrite \
     --region us-west-2
