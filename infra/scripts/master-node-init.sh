@@ -15,13 +15,21 @@ sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
     software-properties-common \
-    curl jq \
+    curl jq unzip \
     gnupg gnupg2 \
     lsb-release \
     containerd.io docker-ce docker-ce-cli \
     kubeadm kubelet kubectl kubernetes-cni
-
 sudo apt-mark hold kubelet kubeadm kubectl
+
+pushd /tmp
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+popd
+
 sudo swapoff -a && sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -44,8 +52,6 @@ sudo systemctl enable docker
 sudo rm /etc/containerd/config.toml
 sudo systemctl restart containerd
 
-sudo hostnamectl set-hostname kubernetes-master
-
 # ---
 
 # Flannel uses the 10.244.0.0/16 CIDR in its pod network manifest.
@@ -55,8 +61,9 @@ sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-cert-extra-sans=$
 KUBEADM_JOIN_COMMAND=$(kubeadm token create --print-join-command 2> /dev/null)
 aws ssm put-parameter \
     --name kubernetes-cluster-join-command \
-    --value ${KUBEADM_JOIN_COMMAND} \
-    --type SecureString
+    --value "${KUBEADM_JOIN_COMMAND}" \
+    --type SecureString \
+    --overwrite \
     --region us-west-2
 
 mkdir -p /home/ubuntu/.kube
@@ -65,7 +72,9 @@ sudo chown $(id -u ubuntu):$(id -u ubuntu) /home/ubuntu/.kube/config
 aws ssm put-parameter \
     --name kubernetes-cluster-kubeconfig \
     --type SecureString \
-    --value file:///home/ubuntu/.kube/config
+    --value file:///home/ubuntu/.kube/config \
+    --tier Advanced \
+    --overwrite \
     --region us-west-2
 
 sudo systemctl restart kubelet
