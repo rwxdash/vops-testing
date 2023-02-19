@@ -1,10 +1,10 @@
 import os
 import flask
 
-application = flask.Flask(__name__)
-application.debug = True
+app = flask.Flask(__name__)
+app.debug = True
 
-@application.route('/')
+@app.route('/')
 def hello_world():
   # storage = Storage()
   # storage.populate()
