@@ -14,7 +14,7 @@ RUN pip install pipenv
 
 WORKDIR /opt/app
 
-RUN pipenv install --system
+RUN pipenv install --system --deploy --ignore-pipfile
 RUN apk del build-deps
 
 CMD ["gunicorn", "--bind", "0.0.0.0:3000", "main:app"]
