@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vops-python-app-deployment
+  labels:
+    app: vops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vops
+  template:
+    metadata:
+      labels:
+        app: vops
+    spec:
+      containers:
+        - name: vops
+          image: aoozdemir/vops-python-app:latest
+          ports:
+            - containerPort: 3000
+              name: vops-python-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vops-service
+spec:
+  type: NodePort
+  selector:
+    app: vops
+  ports:
+    - name: vops-python-app-svc-port
+      protocol: TCP
+      port: 3000
+      targetPort: vops-python-app
