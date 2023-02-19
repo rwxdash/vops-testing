@@ -24,3 +24,4 @@ Goal is to understand self-managed Kubernetes.
 - The application deployed must be accessible from outside. The node security groups might need adjustments.
 - Automate deployments. Not sure I want to automate the infra deployments yet.
 - A way to get the kubeadm join command from the worker node. As the token itself can be expired, the command in the AWS SSM Parameter Store become obsolete.
+- The kubeconfig we push to AWS SSM Parameter Store, uses the private IPv4 address. When working on local environment or on CI, this might cause issues as it would need replacement.
