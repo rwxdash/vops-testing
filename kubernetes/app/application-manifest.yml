@@ -18,9 +18,21 @@ spec:
       containers:
         - name: vops
           image: aoozdemir/vops-python-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
               name: vops-python-app
+          env:
+            - name: MYSQL_USERNAME
+              value: "root"
+            - name: MYSQL_PASSWORD
+              value: "dev1234"
+            - name: MYSQL_INSTANCE_NAME
+              value: "mysql"
+            - name: MYSQL_PORT_3306_TCP_ADDR
+              value: "mysql"
+            - name: MYSQL_PORT_3306_TCP_PORT
+              value: "3306"
 ---
 apiVersion: v1
 kind: Service
