@@ -34,6 +34,11 @@ resource "aws_iam_role_policy_attachment" "AmazonS3FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "AmazonEC2FullAccess" {
+  role       = aws_iam_role.k8s_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+}
+
 resource "aws_iam_instance_profile" "k8s_node_role" {
   name = "k8s_node_role"
   role = aws_iam_role.k8s_node_role.name
