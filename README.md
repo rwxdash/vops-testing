@@ -14,9 +14,11 @@ Goal is to understand self-managed Kubernetes.
 - [x] Create a worker node and attach it to the existing cluster.
     - The kubeconfig and temporary join command can be fetched from AWS SSM. This is temporary until we figure something more conventional.
     - A drawback at this point is to make sure that the SSM parameters are correctly set up.
-- [ ] A sample dockerized application.
+- [x] A sample dockerized application.
     - The application needs a persistant database.
 - [ ] Application must be deployable via CI/CD.
+    - Build and deploy Docker image to DockerHub.
+    - Apply kubernetes deployment to the cluster to pull new image.
 
 # things to figure out
 
@@ -25,3 +27,4 @@ Goal is to understand self-managed Kubernetes.
 - Automate deployments. Not sure I want to automate the infra deployments yet.
 - A way to get the kubeadm join command from the worker node. As the token itself can be expired, the command in the AWS SSM Parameter Store become obsolete.
 - The kubeconfig we push to AWS SSM Parameter Store, uses the private IPv4 address. When working on local environment or on CI, this might cause issues as it would need replacement.
+- The application needs ingress or external IP to be accessible from the internet.
