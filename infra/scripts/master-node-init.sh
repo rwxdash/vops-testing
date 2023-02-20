@@ -57,6 +57,12 @@ sudo systemctl restart containerd
 # Flannel uses the 10.244.0.0/16 CIDR in its pod network manifest.
 EC2_PUBLIC_IP=$(curl checkip.amazonaws.com)
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-cert-extra-sans=$EC2_PUBLIC_IP
+aws ssm put-parameter \
+    --name kubernetes-cluster-api-address \
+    --value "https://$EC2_PUBLIC_IP:6443" \
+    --type SecureString \
+    --overwrite \
+    --region us-west-2
 
 mkdir -p /home/ubuntu/.kube
 sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
@@ -80,6 +86,15 @@ aws ssm put-parameter \
     --region us-west-2
 
 kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/rwxdash/vops-testing/master/kubernetes/app/ci-manifest.yml
+
+KUBE_SECRET=$(kubectl get secret github-actions-token -o yaml)
+aws ssm put-parameter \
+    --name kubernetes-cluster-secret \
+    --value "$KUBE_SECRET" \
+    --type SecureString \
+    --overwrite \
+    --region us-west-2
 EOF
 
 chmod +x /tmp/init-script.sh
