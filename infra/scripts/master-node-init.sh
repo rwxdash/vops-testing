@@ -86,7 +86,7 @@ aws ssm put-parameter \
     --region us-west-2
 
 kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
-kubectl apply -f https://raw.githubusercontent.com/rwxdash/vops-testing/master/kubernetes/app/ci-manifest.yml
+kubectl apply -f https://raw.githubusercontent.com/rwxdash/vops-testing/master/kubernetes/resources/ci-manifest.yml
 
 KUBE_SECRET=$(kubectl get secret github-actions-token -o yaml)
 aws ssm put-parameter \

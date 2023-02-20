@@ -56,7 +56,7 @@ sudo systemctl restart containerd
 
 # Tempopary solution until I figure out a way to make sure
 # master node is set up successfully.
-sleep 120
+sleep 60
 
 # ---
 
