@@ -46,4 +46,5 @@ jobs:
           k8s-url: ${{ secrets.CLUSTER_API_ENDPOINT }}
           k8s-secret: ${{ secrets.CLUSTER_GHA_SECRET }}
       - run: |
+          sed -ie "s/latest/${GITHUB_SHA::8}/g" ./kubernetes/app/application-manifest.yml
           kubectl apply -f ./kubernetes/app/application-manifest.yml
