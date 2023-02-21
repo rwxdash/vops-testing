@@ -3,10 +3,12 @@
 ## Prerequisite
 
 - Install Terraform
-- AWS Configuration
+    + See https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform
+- AWS CLI and Configuration
+    + See https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+    + See https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html
 
 ...
-
 
 ## Initial Setup
 
@@ -72,4 +74,30 @@ To prepare the GitHub Action to run our deployments, we need some things. If you
             | jq -r '.Parameters[0].Value'
         ```
 
-At this point, the GitHub Action is ready to run and deploy our application.
+At this point, the GitHub Action is ready to run and deploy our application. You can go to `https://github.com/<YOUR_USERNAME>/vops-testing/actions/workflows/rollout.yml` and run the workflow.
+
+You can also run [utils/set-kubeconfig.sh](./utils/set-kubeconfig.sh) to set up the Kube context in locally. **Beware that this will replace your existing configuration and it'll move it as `config-$(date +%s%3N).bak`**. Also make sure to set your `AWS_PROFILE` for your shell session.
+
+## Destroying Resources
+
+To destroy the resources we create, again, `cd` into `infra/` directory and run the following.
+
+```bash
+$ export AWS_PROFILE=<YOUR_PROFILE_NAME>
+
+$ terraform destroy -auto-approve
+```
+
+As we create some parameters while initializing our instances, those resources should be deleted separately. To destroy these resources, run the following.
+
+```bash
+$ export AWS_PROFILE=<YOUR_PROFILE_NAME>
+
+$ aws ssm delete-parameters \
+    --names \
+        kubernetes-cluster-kubeconfig \
+        kubernetes-cluster-api-address \
+        kubernetes-cluster-tmp-join-command \
+        kubernetes-cluster-secret \
+    --region us-west-2
+```
