@@ -1,9 +1,18 @@
 # vops-testing
 
-Goal is to understand self-managed Kubernetes.
+Goal is to understand self-managed Kubernetes.kk
+
+# unfinished parts and improvements
+
+- Application isn't exposed to the internet. Since we're on bare metal, service type `LoadBalancer` won't create LoadBalancer automatically. I haven't figured out how to make it work yet.
+- Better scripting around etting up the Kube config file. The utility file `./utils/set-kubeconfig.sh` will set up the existing configuration file from AWS SSM. However, this file has the private IP address of our instance as its `server` value. This needs to be changed manually to public IP of our master node instance if we want to work on our cluster locally. Another way would be to create a secret, similar to the secret we use in our CI and generate the kube config from this secret.
+- Maybe it's better to trigger our CI automatically when there is a push to our master branch.
+- If at any point, our worker node restarts or we want to create new worker nodes, the existing `kubeadm join` command and its token could be expired.
+
 
 # todo
 
+- [ ] Expose applications to the public internet.
 - [x] Create a Terraform configuration to provision cluster nodes.
     - 1 Master Node and 1 Worker Node.
     - Master node needs min. 2 vCPUs. Use t3.small.
@@ -16,9 +25,10 @@ Goal is to understand self-managed Kubernetes.
     - A drawback at this point is to make sure that the SSM parameters are correctly set up.
 - [x] A sample dockerized application.
     - The application needs a persistant database.
-- [ ] Application must be deployable via CI/CD.
+- [x] Application must be deployable via CI/CD.
     - Build and deploy Docker image to DockerHub.
     - Apply kubernetes deployment to the cluster to pull new image.
+
 
 # things to figure out
 
