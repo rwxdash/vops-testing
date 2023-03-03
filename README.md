@@ -45,6 +45,7 @@ Goal is to understand self-managed Kubernetes.kk
     + Bitnami helm chart
 - Use ansible to provision cluster node
     + https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
+    + https://ranchermanager.docs.rancher.com/v2.5/getting-started/quick-start-guides/deploy-rancher-manager/aws
 - Secret usage can be improved. eg. mysql
 - dev/stage/prod stage splits
 - Pipeline chart/diagram
