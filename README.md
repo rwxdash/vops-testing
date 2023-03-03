@@ -1,11 +1,11 @@
 # vops-testing
 
-Goal is to understand self-managed Kubernetes.kk
+Goal is to understand self-managed Kubernetes.
 
 # unfinished parts and improvements
 
 - Application isn't exposed to the internet. Since we're on bare metal, service type `LoadBalancer` won't create LoadBalancer automatically. I haven't figured out how to make it work yet.
-- Better scripting around etting up the Kube config file. The utility file `./utils/set-kubeconfig.sh` will set up the existing configuration file from AWS SSM. However, this file has the private IP address of our instance as its `server` value. This needs to be changed manually to public IP of our master node instance if we want to work on our cluster locally. Another way would be to create a secret, similar to the secret we use in our CI and generate the kube config from this secret.
+- Better scripting around setting up the Kube config file. The utility file `./utils/set-kubeconfig.sh` will set up the existing configuration file from AWS SSM. However, this file has the private IP address of our instance as its `server` value. This needs to be changed manually to public IP of our master node instance if we want to work on our cluster locally. Another way would be to create a secret, similar to the secret we use in our CI and generate the kube config from this secret.
 - Maybe it's better to trigger our CI automatically when there is a push to our master branch.
 - If at any point, our worker node restarts or we want to create new worker nodes, the existing `kubeadm join` command and its token could be expired.
 
