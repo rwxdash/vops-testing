@@ -38,3 +38,14 @@ Goal is to understand self-managed Kubernetes.kk
 - A way to get the kubeadm join command from the worker node. As the token itself can be expired, the command in the AWS SSM Parameter Store become obsolete.
 - The kubeconfig we push to AWS SSM Parameter Store, uses the private IPv4 address. When working on local environment or on CI, this might cause issues as it would need replacement.
 - The application needs ingress or external IP to be accessible from the internet.
+
+# nice to have
+
+- Use helm charts for kubernetes resources
+    + Bitnami helm chart
+- Use ansible to provision cluster node
+    + https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
+- Secret usage can be improved. eg. mysql
+- dev/stage/prod stage splits
+- Pipeline chart/diagram
+- Test stage with sonarcube
